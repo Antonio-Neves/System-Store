@@ -1,0 +1,29 @@
+# Sensitive files
+.env
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+
+# Data Base
+db.sqlite3
+
+# PyCharm
+.idea
+
+# Virtualenv
+.venv
+.venvdj4
+
+# Folders
+media
+htmlcov/*
+
+# Files
+/my_portfolio/settings_original.py
+/my_portfolio/settings_test.py
+
+# Testes
+
