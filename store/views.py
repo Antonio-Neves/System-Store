@@ -218,10 +218,13 @@ def sale_list(request):
         sales = sales.filter(created_at__date__lte=date_to)
 
     total = sales.aggregate(Sum('total'))['total__sum'] or 0
+    sales_count = sales.count()
+    average_ticket = total / sales_count if sales_count > 0 else 0
 
     context = {
         'sales': sales[:50],
         'total': total,
+        'average_ticket': average_ticket,
         'date_from': date_from,
         'date_to': date_to,
     }
@@ -357,8 +360,3 @@ def stock_adjustment(request):
         form = StockMovementForm()
 
     return render(request, 'store/stock_adjustment.html', {'form': form})
-
-
-from django.shortcuts import render
-
-# Create your views here.
