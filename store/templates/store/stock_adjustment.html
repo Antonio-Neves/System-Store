@@ -1,0 +1,85 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Stock Adjustment - Store Management{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2><i class="bi bi-arrow-left-right"></i> Stock Adjustment</h2>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Product *</label>
+                        {{ form.product }}
+                        {% if form.product.errors %}
+                            <div class="text-danger">{{ form.product.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Movement Type *</label>
+                        {{ form.movement_type }}
+                        {% if form.movement_type.errors %}
+                            <div class="text-danger">{{ form.movement_type.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            <strong>Entrada:</strong> Add to stock |
+                            <strong>Saída:</strong> Remove from stock |
+                            <strong>Ajuste:</strong> Set exact stock quantity
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantity *</label>
+                        {{ form.quantity }}
+                        {% if form.quantity.errors %}
+                            <div class="text-danger">{{ form.quantity.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Reason *</label>
+                        {{ form.reason }}
+                        {% if form.reason.errors %}
+                            <div class="text-danger">{{ form.reason.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Example: "Received from supplier", "Damaged product", "Inventory count"
+                        </small>
+                    </div>
+
+                    <hr>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Save Movement
+                    </button>
+                    <a href="{% url 'stock_movements' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Important Information</h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>Entrada (In):</strong> Adds quantity to current stock</li>
+                    <li><strong>Saída (Out):</strong> Removes quantity from current stock</li>
+                    <li><strong>Ajuste (Adjustment):</strong> Sets stock to exact quantity specified</li>
+                    <li>All movements are recorded and cannot be deleted</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

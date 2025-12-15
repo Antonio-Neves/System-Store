@@ -1,0 +1,112 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Sales - Store Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-cart-check"></i> Sales</h2>
+    <a href="{% url 'sale_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> New Sale
+    </a>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-5">
+                <label class="form-label">From Date</label>
+                <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">To Date</label>
+                <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-funnel"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Total Summary -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <h6 class="text-muted">Total Sales</h6>
+                <h3>{{ sales|length }}</h3>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-muted">Total Revenue</h6>
+                <h3 class="text-success">R$ {{ total|floatformat:2 }}</h3>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-muted">Average Ticket</h6>
+                <h3 class="text-info">
+                    {% if sales %}
+                        R$ {{ total|divisibleby:sales|length|floatformat:2 }}
+                    {% else %}
+                        R$ 0.00
+                    {% endif %}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sales Table -->
+<div class="card">
+    <div class="card-body">
+        {% if sales %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date/Time</th>
+                            <th>Customer</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+                            <th>Discount</th>
+                            <th>Final Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in sales %}
+                            <tr>
+                                <td><strong>#{{ sale.id }}</strong></td>
+                                <td>{{ sale.created_at|date:"d/m/Y H:i" }}</td>
+                                <td>{{ sale.customer.name|default:"Walk-in" }}</td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        {{ sale.get_payment_method_display }}
+                                    </span>
+                                </td>
+                                <td>R$ {{ sale.total|floatformat:2 }}</td>
+                                <td>R$ {{ sale.discount|floatformat:2 }}</td>
+                                <td>
+                                    <strong class="text-success">
+                                        R$ {{ sale.final_total|floatformat:2 }}
+                                    </strong>
+                                </td>
+                                <td>
+                                    <a href="{% url 'sale_detail' sale.id %}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">No sales found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

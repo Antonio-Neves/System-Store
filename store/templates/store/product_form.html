@@ -1,0 +1,131 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ action }} Product - Store Management{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2><i class="bi bi-box-seam"></i> {{ action }} Product</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Product Name *</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Category</label>
+                            {{ form.category }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Price (R$) *</label>
+                            {{ form.price }}
+                            {% if form.price.errors %}
+                                <div class="text-danger">{{ form.price.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Cost (R$)</label>
+                            {{ form.cost }}
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Barcode</label>
+                            {{ form.barcode }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Initial Stock *</label>
+                            {{ form.stock }}
+                            {% if form.stock.errors %}
+                                <div class="text-danger">{{ form.stock.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Minimum Stock Alert</label>
+                            {{ form.min_stock }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Product Image</label>
+                        {{ form.image }}
+                        {% if product.image %}
+                            <div class="mt-2">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                                     style="max-width: 200px; max-height: 200px;">
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-check mb-3">
+                        {{ form.active }}
+                        <label class="form-check-label">
+                            Active
+                        </label>
+                    </div>
+
+                    <hr>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Save Product
+                    </button>
+                    <a href="{% url 'product_list' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0">Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <small>Fill in all required fields marked with *</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <small>Cost is used to calculate profit margin</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <small>Minimum stock will trigger alerts</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <small>Barcode helps with quick searches</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
