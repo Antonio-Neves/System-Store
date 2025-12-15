@@ -1,12 +1,12 @@
 {% extends 'store/base.html' %}
 
-{% block title %}Dashboard - Store Management{% endblock %}
+{% block title %}Tela Principal{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+    <h2><i class="bi bi-speedometer2"></i> Tela Principal</h2>
     <a href="{% url 'sale_create' %}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> New Sale
+        <i class="bi bi-plus-circle"></i> Nova Venda
     </a>
 </div>
 
@@ -15,7 +15,7 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-primary">
             <div class="card-body">
-                <h6 class="card-title">Total Products</h6>
+                <h6 class="card-title">Total de Produtos</h6>
                 <h2 class="mb-0">{{ total_products }}</h2>
             </div>
         </div>
@@ -24,7 +24,7 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-success">
             <div class="card-body">
-                <h6 class="card-title">Total Customers</h6>
+                <h6 class="card-title">Total Clientes</h6>
                 <h2 class="mb-0">{{ total_customers }}</h2>
             </div>
         </div>
@@ -33,7 +33,7 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-info">
             <div class="card-body">
-                <h6 class="card-title">Today Sales</h6>
+                <h6 class="card-title">Vendas de Hoje</h6>
                 <h2 class="mb-0">{{ today_sales_count }}</h2>
             </div>
         </div>
@@ -42,7 +42,7 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-warning">
             <div class="card-body">
-                <h6 class="card-title text-dark">Today Revenue</h6>
+                <h6 class="card-title text-dark">Faturamento de Hoje</h6>
                 <h2 class="mb-0 text-dark">R$ {{ today_sales_total|floatformat:2 }}</h2>
             </div>
         </div>
@@ -54,7 +54,7 @@
     <div class="col-md-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Weekly Revenue</h5>
+                <h5 class="card-title">Faturamento Semanal</h5>
                 <h3 class="text-success">R$ {{ week_sales_total|floatformat:2 }}</h3>
             </div>
         </div>
@@ -63,7 +63,7 @@
     <div class="col-md-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Monthly Revenue</h5>
+                <h5 class="card-title">Faturamento Mensal</h5>
                 <h3 class="text-success">R$ {{ month_sales_total|floatformat:2 }}</h3>
             </div>
         </div>
@@ -73,12 +73,12 @@
 <!-- Low Stock Alert -->
 {% if low_stock_products %}
 <div class="alert alert-danger" role="alert">
-    <h5><i class="bi bi-exclamation-triangle"></i> Low Stock Alert</h5>
+    <h5><i class="bi bi-exclamation-triangle"></i> Alerta de Estoque Baixo</h5>
     <ul class="mb-0">
         {% for product in low_stock_products %}
             <li>
                 <strong>{{ product.name }}</strong> -
-                Current stock: {{ product.stock }}
+                Estoque Atual: {{ product.stock }}
                 (Min: {{ product.min_stock }})
             </li>
         {% endfor %}
@@ -104,13 +104,13 @@
                                     <small class="text-muted">R$ {{ product.price|floatformat:2 }}</small>
                                 </div>
                                 <span class="badge bg-primary rounded-pill">
-                                    {{ product.total_sold|default:0 }} sold
+                                    {{ product.total_sold|default:0 }} Mais Vendidos
                                 </span>
                             </div>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-muted">No sales data yet.</p>
+                    <p class="text-muted">Sem Dados de Vendas.</p>
                 {% endif %}
             </div>
         </div>
@@ -120,7 +120,7 @@
     <div class="col-md-6 mb-4">
         <div class="card">
             <div class="card-header bg-white">
-                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Sales</h5>
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Vendas Recentes</h5>
             </div>
             <div class="card-body">
                 {% if recent_sales %}
@@ -143,7 +143,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-muted">No sales yet.</p>
+                    <p class="text-muted">Sem vendas.</p>
                 {% endif %}
             </div>
         </div>
