@@ -1,49 +1,15 @@
-# Django no Arranque do windows
 
-Sim, tem como fazer o **Waitress arrancar logo no início do Windows**, mesmo sem a sua intervenção, simulando um ambiente de produção real onde o servidor está sempre a funcionar.
+### 1. Instalar o NSSM
 
-A melhor maneira de fazer isso no Windows é configurar a sua aplicação para rodar como um **Serviço do Windows (Windows Service)**.
+   **Extraia:** Descomprima o ficheiro e copie o executável `nssm.exe` para uma pasta de fácil acesso (ex: `C:\nssm`).
 
-## 🛠️ Método Recomendado: Usar o NSSM
+### 2. Criar o Serviço do Windows
 
-O **NSSM (Non-Sucking Service Manager)** é a ferramenta mais popular e mais fácil de usar para transformar qualquer aplicação de linha de comando (como o Waitress a correr o seu Django) num serviço do Windows.
+   Abra o **Prompt de Comando como Administrador** e use o NSSM para instalar o seu *script* como um serviço:
 
-Um serviço do Windows arranca automaticamente no início do sistema, corre em segundo plano, e reinicia-se automaticamente em caso de falha.
+   Navegue até à pasta onde guardou o nssm.exe
 
----
-
-### 1. Preparação: Crie um Script de Arranque Simples
-
-Primeiro, garanta que o seu *script* `.bat` apenas ativa o ambiente virtual e inicia o Waitress. Chame-o de, por exemplo, `iniciar_waitress.bat`:
-
-Fragmento do código
-
-`@echo off
-REM Script que será executado pelo NSSM
-
-REM Ativação e arranque (mantenha o caminho completo, pois o NSSM pode não saber onde está)
-call "C:\Caminho\Completo\Para\O\Seu\Projeto\.venv\Scripts\activate.bat"
-
-REM Arranque do Waitress
-waitress-serve --port=8000 meuprojeto.wsgi:application
-
-REM Não coloque 'pause' ou 'deactivate' no final, pois o serviço deve correr até ser parado.`
-
-*(Certifique-se de substituir o caminho completo e o nome do seu projeto `meuprojeto`)*.
-
-### 2. Instalar o NSSM
-
-1. **Descarregue o NSSM:** Pesquise por "NSSM download" no Google.
-2. **Extraia:** Descomprima o ficheiro e copie o executável `nssm.exe` para uma pasta de fácil acesso (ex: `C:\nssm`).
-
-### 3. Criar o Serviço do Windows
-
-Abra o **Prompt de Comando como Administrador** e use o NSSM para instalar o seu *script* como um serviço:
-
-Bash
-
-`# Navegue até à pasta onde guardou o nssm.exe
-C:\nssm\nssm install NomeDoSeuServicoDjango`
+`nssm install SystemStoreDjango`
 
 O NSSM irá abrir uma janela gráfica onde você deve configurar o seguinte:
 
