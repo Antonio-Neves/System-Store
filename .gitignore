@@ -19,7 +19,9 @@ db.sqlite3
 
 # Folders
 media
+staticfiles
 htmlcov/*
+
 
 # Files
 # **/migrations/*.py
