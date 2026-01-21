@@ -11,229 +11,200 @@
             box-sizing: border-box;
         }
 
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            font-size: 11pt;
-            line-height: 1.5;
-            padding: 30mm 20mm;
-            background: white;
-        }
-
-        .invoice {
-            max-width: 170mm;
-            margin: 0 auto;
-            border: 2px solid #004F9F;
-            padding: 15mm;
-        }
-
-        .header {
-            text-align: center;
-            border-bottom: 3px solid #004F9F;
-            padding-bottom: 10mm;
-            margin-bottom: 10mm;
-        }
-
-        .company-logo {
-            font-size: 28pt;
-            font-weight: bold;
-            color: #004F9F;
-            margin-bottom: 5mm;
-        }
-
-        .company-info {
-            font-size: 10pt;
-            color: #666;
-            margin: 2mm 0;
-        }
-
-        .document-title {
-            font-size: 18pt;
-            font-weight: bold;
-            color: #004F9F;
-            margin: 8mm 0 5mm 0;
-            text-align: center;
-        }
-
-        .document-number {
-            font-size: 14pt;
-            color: #666;
-            text-align: center;
-            margin-bottom: 8mm;
-        }
-
-        .info-section {
-            margin: 8mm 0;
-        }
-
-        .info-title {
-            font-weight: bold;
-            color: #004F9F;
-            font-size: 12pt;
-            border-bottom: 2px solid #004F9F;
-            padding-bottom: 2mm;
-            margin-bottom: 3mm;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3mm;
-            margin: 3mm 0;
-        }
-
-        .info-item {
-            padding: 2mm;
-            background: #f8f9fa;
-            border-left: 3px solid #FBB900;
-        }
-
-        .info-label {
-            font-weight: bold;
             font-size: 9pt;
-            color: #666;
-        }
-
-        .info-value {
-            font-size: 11pt;
+            line-height: 1.3;
             color: #000;
         }
 
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 8mm 0;
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm;
+            margin: 0 auto;
+            background: white;
+            position: relative;
         }
 
-        .items-table th {
-            background: #004F9F;
-            color: white;
-            padding: 3mm;
-            text-align: left;
-            font-size: 10pt;
+        /* Header */
+        .header {
+            display: grid;
+            grid-template-columns: 30mm 1fr 50mm;
+            gap: 5mm;
+            padding-bottom: 5mm;
+            border-bottom: 2px solid #000;
+            margin-bottom: 5mm;
         }
 
-        .items-table td {
-            padding: 3mm;
-            border-bottom: 1px solid #ddd;
-            font-size: 10pt;
+        .logo {
+            width: 17mm;
+            height: 17mm;
+            object-fit: contain;
         }
 
-        .items-table tr:hover {
-            background: #f8f9fa;
+        .company-info {
+            text-align: center;
         }
 
-        .text-right {
+        .company-name {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #004F9F;
+            margin-bottom: 2mm;
+        }
+
+        .company-details {
+            font-size: 8pt;
+            line-height: 1.4;
+        }
+
+        .document-info {
             text-align: right;
         }
 
-        .text-center {
-            text-align: center;
-        }
-
-        .totals-section {
-            margin-top: 8mm;
-            float: right;
-            width: 60mm;
-        }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 2mm 0;
-            font-size: 11pt;
-        }
-
-        .total-divider {
-            border-top: 1px solid #ddd;
-            margin: 2mm 0;
-        }
-
-        .total-final {
-            font-weight: bold;
+        .doc-title {
             font-size: 14pt;
+            font-weight: bold;
             color: #004F9F;
-            border-top: 2px solid #004F9F;
-            padding-top: 3mm;
-            margin-top: 3mm;
+            margin-bottom: 2mm;
         }
 
-        .payment-section {
-            clear: both;
-            margin-top: 15mm;
-            padding: 5mm;
-            background: #f8f9fa;
-            border-left: 5px solid #FBB900;
+        .doc-number {
+            font-size: 12pt;
+            font-weight: bold;
         }
 
-        .notes-section {
-            margin-top: 8mm;
-            padding: 5mm;
-            background: #fff9e6;
-            border: 1px dashed #FBB900;
+        /* Info Boxes */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5mm;
+            margin-bottom: 3mm;
         }
 
-        .footer {
-            margin-top: 15mm;
-            padding-top: 5mm;
-            border-top: 2px solid #004F9F;
-            text-align: center;
-            font-size: 9pt;
+        .info-box {
+            border: 1px solid #000;
+            padding: 2mm;
+        }
+
+        .info-box.full {
+            grid-column: 1 / -1;
+        }
+
+        .box-label {
+            font-size: 7pt;
+            font-weight: bold;
+            text-transform: uppercase;
             color: #666;
         }
 
-        .cancelled-banner {
-            position: relative;
-            text-align: center;
-            font-weight: bold;
-            font-size: 32pt;
-            color: #dc3545;
-            border: 5px solid #dc3545;
-            padding: 10mm;
-            margin: 10mm 0;
-            transform: rotate(-5deg);
-            background: rgba(220, 53, 69, 0.1);
+        .box-value {
+            font-size: 9pt;
+            margin-top: 1mm;
         }
 
-        .cancelled-info {
-            background: #f8d7da;
-            border: 1px solid #dc3545;
-            padding: 5mm;
-            margin: 5mm 0;
-            border-radius: 3mm;
+        /* Items Table */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 3mm 0;
+            font-size: 8pt;
+        }
+
+        .items-table th {
+            background: #f0f0f0;
+            border: 1px solid #000;
+            padding: 2mm;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .items-table td {
+            border: 1px solid #000;
+            padding: 2mm;
+        }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        /* Totals */
+        .totals-section {
+            margin-top: 3mm;
+            display: grid;
+            grid-template-columns: 1fr 50mm;
+            gap: 5mm;
+        }
+
+        .totals-box {
+            border: 2px solid #000;
+            padding: 3mm;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 1mm 0;
+            font-size: 9pt;
+        }
+
+        .total-final {
+            border-top: 2px solid #000;
+            margin-top: 2mm;
+            padding-top: 2mm;
+            font-weight: bold;
+            font-size: 11pt;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 10mm;
+            left: 10mm;
+            right: 10mm;
+            border-top: 1px solid #000;
+            padding-top: 3mm;
+            font-size: 7pt;
+            text-align: center;
+        }
+
+        /* Cancelled */
+        .cancelled {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 60pt;
+            font-weight: bold;
+            color: rgba(220, 53, 69, 0.3);
+            border: 5px solid rgba(220, 53, 69, 0.3);
+            padding: 20mm;
+            pointer-events: none;
         }
 
         @media print {
-            body {
-                padding: 0;
-            }
-
-            .invoice {
-                border: none;
-                max-width: 100%;
-            }
-
-            .no-print {
-                display: none;
-            }
-
-            @page {
-                size: A4;
-                margin: 15mm;
-            }
+            .no-print { display: none; }
+            body { background: white; }
         }
 
         .no-print {
-            text-align: center;
-            margin: 10mm 0;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
         }
 
         .btn {
-            padding: 3mm 8mm;
-            margin: 0 3mm;
-            cursor: pointer;
+            padding: 10px 20px;
+            margin: 5px;
             border: none;
-            border-radius: 3mm;
-            font-size: 11pt;
+            border-radius: 5px;
+            cursor: pointer;
             font-weight: bold;
         }
 
@@ -249,169 +220,153 @@
     </style>
 </head>
 <body>
-    <div class="invoice">
-        <!-- Header -->
-        <div class="header">
-            <div class="company-logo">AN INFORMÁTICA</div>
-            <div class="company-info">São José do Araguaia, Xinguara, Pará</div>
-            <div class="company-info">Telefone: +55 94 981 044 215</div>
-        </div>
+    <div class="no-print">
+        <button onclick="window.print()" class="btn btn-print">🖨️ Imprimir</button>
+        <button onclick="window.close()" class="btn btn-close">✖️ Fechar</button>
+    </div>
 
-        <div class="document-title">NOTA DE VENDA</div>
-        <div class="document-number">Nº {{ sale.id|stringformat:"06d" }}</div>
-
-        <!-- Cancelled Banner -->
+    <div class="page">
         {% if sale.is_cancelled %}
-        <div class="cancelled-banner">
-            *** CANCELADA ***
-        </div>
-        <div class="cancelled-info">
-            <strong>Venda Cancelada</strong><br>
-            Data: {{ sale.cancelled_at|date:"d/m/Y às H:i" }}<br>
-            Por: {{ sale.cancelled_by.username }}<br>
-            Motivo: {{ sale.cancellation_reason }}
-        </div>
+        <div class="cancelled">CANCELADA</div>
         {% endif %}
 
-        <!-- Sale Information -->
-        <div class="info-section">
-            <div class="info-title">DADOS DA VENDA</div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="info-label">Data de Emissão</div>
-                    <div class="info-value">{{ sale.created_at|date:"d/m/Y" }}</div>
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <img src="/static/images/logo.png" alt="Logo" class="logo">
+            </div>
+            <div class="company-info">
+                <div class="company-name">AN INFORMÁTICA</div>
+                <div class="company-details">
+                    São José do Araguaia, Xinguara, Pará<br>
+                    Telefone: +55 94 981 044 215
                 </div>
-                <div class="info-item">
-                    <div class="info-label">Hora</div>
-                    <div class="info-value">{{ sale.created_at|date:"H:i:s" }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Vendedor</div>
-                    <div class="info-value">{{ sale.user.get_full_name|default:sale.user.username }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Forma de Pagamento</div>
-                    <div class="info-value">{{ sale.get_payment_method_display }}</div>
+            </div>
+            <div class="document-info">
+                <div class="doc-title">NOTA DE VENDA</div>
+                <div class="doc-number">Nº {{ sale.id|stringformat:"06d" }}</div>
+                <div style="font-size: 8pt; margin-top: 2mm;">
+                    {{ sale.created_at|date:"d/m/Y" }}
                 </div>
             </div>
         </div>
 
-        <!-- Customer Information -->
-        {% if sale.customer %}
-        <div class="info-section">
-            <div class="info-title">DADOS DO CLIENTE</div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="info-label">Nome</div>
-                    <div class="info-value">{{ sale.customer.name }}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Telefone</div>
-                    <div class="info-value">{{ sale.customer.phone }}</div>
-                </div>
-                {% if sale.customer.cpf %}
-                <div class="info-item">
-                    <div class="info-label">CPF</div>
-                    <div class="info-value">{{ sale.customer.cpf }}</div>
-                </div>
-                {% endif %}
-                {% if sale.customer.email %}
-                <div class="info-item">
-                    <div class="info-label">E-mail</div>
-                    <div class="info-value">{{ sale.customer.email }}</div>
-                </div>
-                {% endif %}
+        <!-- Sale Data -->
+        <div class="info-row">
+            <div class="info-box">
+                <div class="box-label">Data e Hora</div>
+                <div class="box-value">{{ sale.created_at|date:"d/m/Y \à\s H:i" }}</div>
             </div>
-            {% if sale.customer.address %}
-            <div class="info-item" style="margin-top: 3mm; grid-column: 1 / -1;">
-                <div class="info-label">Endereço</div>
-                <div class="info-value">{{ sale.customer.address }}</div>
+            <div class="info-box">
+                <div class="box-label">Vendedor</div>
+                <div class="box-value">{{ sale.user.get_full_name|default:sale.user.username }}</div>
             </div>
-            {% endif %}
+        </div>
+
+        <!-- Customer Data -->
+        <div class="info-row">
+            <div class="info-box full">
+                <div class="box-label">Cliente</div>
+                <div class="box-value">
+                    {% if sale.customer %}
+                        {{ sale.customer.name }}
+                        {% if sale.customer.cpf %} - CPF: {{ sale.customer.cpf }}{% endif %}
+                        {% if sale.customer.phone %} - Tel: {{ sale.customer.phone }}{% endif %}
+                    {% else %}
+                        Cliente não identificado
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if sale.customer.address %}
+        <div class="info-row">
+            <div class="info-box full">
+                <div class="box-label">Endereço</div>
+                <div class="box-value">{{ sale.customer.address }}</div>
+            </div>
         </div>
         {% endif %}
 
         <!-- Items Table -->
-        <div class="info-section">
-            <div class="info-title">PRODUTOS/SERVIÇOS</div>
-            <table class="items-table">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">Código</th>
-                        <th style="width: 40%;">Descrição</th>
-                        <th style="width: 10%;" class="text-center">Qtd</th>
-                        <th style="width: 20%;" class="text-right">Valor Unit.</th>
-                        <th style="width: 20%;" class="text-right">Valor Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in sale.items.all %}
-                    <tr>
-                        <td>{{ item.product.id }}</td>
-                        <td><strong>{{ item.product.name }}</strong></td>
-                        <td class="text-center">{{ item.quantity }}</td>
-                        <td class="text-right">R$ {{ item.price|floatformat:2 }}</td>
-                        <td class="text-right"><strong>R$ {{ item.subtotal|floatformat:2 }}</strong></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">Cód.</th>
+                    <th style="width: 47%;">Descrição do Produto/Serviço</th>
+                    <th style="width: 10%;" class="text-center">Qtd.</th>
+                    <th style="width: 15%;" class="text-right">Valor Unit.</th>
+                    <th style="width: 20%;" class="text-right">Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in sale.items.all %}
+                <tr>
+                    <td class="text-center">{{ item.product.id }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td class="text-center">{{ item.quantity }}</td>
+                    <td class="text-right">R$ {{ item.price|floatformat:2 }}</td>
+                    <td class="text-right">R$ {{ item.subtotal|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-        <!-- Totals -->
+        <!-- Totals Section -->
         <div class="totals-section">
-            <div class="total-row">
-                <span>Subtotal:</span>
-                <span>R$ {{ sale.total|floatformat:2 }}</span>
-            </div>
-            {% if sale.discount > 0 %}
-            <div class="total-row">
-                <span>Desconto:</span>
-                <span style="color: #dc3545;">- R$ {{ sale.discount|floatformat:2 }}</span>
-            </div>
-            <div class="total-divider"></div>
-            {% endif %}
-            <div class="total-row total-final">
-                <span>TOTAL:</span>
-                <span>R$ {{ sale.final_total|floatformat:2 }}</span>
-            </div>
-        </div>
+            <div>
+                {% if sale.notes %}
+                <div class="info-box">
+                    <div class="box-label">Observações</div>
+                    <div class="box-value">{{ sale.notes }}</div>
+                </div>
+                {% endif %}
 
-        <!-- Payment Info -->
-        <div class="payment-section">
-            <strong>PAGAMENTO:</strong> {{ sale.get_payment_method_display }}<br>
-            <strong>VALOR PAGO:</strong> R$ {{ sale.final_total|floatformat:2 }}
-        </div>
+                {% if sale.is_cancelled %}
+                <div class="info-box" style="border-color: #dc3545; margin-top: 3mm;">
+                    <div class="box-label" style="color: #dc3545;">Cancelamento</div>
+                    <div class="box-value">
+                        <strong>Data:</strong> {{ sale.cancelled_at|date:"d/m/Y H:i" }}<br>
+                        <strong>Por:</strong> {{ sale.cancelled_by.username }}<br>
+                        <strong>Motivo:</strong> {{ sale.cancellation_reason }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
 
-        <!-- Notes -->
-        {% if sale.notes %}
-        <div class="notes-section">
-            <strong>OBSERVAÇÕES:</strong><br>
-            {{ sale.notes }}
+            <div class="totals-box">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>R$ {{ sale.total|floatformat:2 }}</span>
+                </div>
+                {% if sale.discount > 0 %}
+                <div class="total-line">
+                    <span>Desconto:</span>
+                    <span>R$ {{ sale.discount|floatformat:2 }}</span>
+                </div>
+                {% endif %}
+                <div class="total-line total-final">
+                    <span>TOTAL:</span>
+                    <span>R$ {{ sale.final_total|floatformat:2 }}</span>
+                </div>
+                <div style="margin-top: 3mm; padding-top: 3mm; border-top: 1px solid #ccc; font-size: 8pt;">
+                    <strong>Forma de Pagamento:</strong><br>
+                    {{ sale.get_payment_method_display }}
+                </div>
+            </div>
         </div>
-        {% endif %}
 
         <!-- Footer -->
         <div class="footer">
-            <div style="margin-bottom: 5mm;">
-                <strong>Obrigado pela preferência!</strong>
+            <div style="font-weight: bold; margin-bottom: 2mm;">
+                Obrigado pela preferência!
             </div>
             <div>
-                Este documento não possui valor fiscal<br>
-                Sistema de Gestão - AN Informática<br>
-                Impresso em: {{ "now"|date:"d/m/Y às H:i:s" }}
+                © {% now "Y" %} AN Informática |
+                Este documento não possui valor fiscal |
+                Impresso em: {% now "d/m/Y \à\s H:i" %}
             </div>
         </div>
-    </div>
-
-    <!-- Print Buttons -->
-    <div class="no-print">
-        <button onclick="window.print()" class="btn btn-print">
-            🖨️ Imprimir Nota
-        </button>
-        <button onclick="window.close()" class="btn btn-close">
-            ✖️ Fechar
-        </button>
     </div>
 </body>
 </html>
