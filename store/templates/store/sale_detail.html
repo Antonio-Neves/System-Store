@@ -4,10 +4,22 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-receipt"></i> Venda #{{ sale.id }}</h2>
-    <a href="{% url 'sale_list' %}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Voltar para Vendas
-    </a>
+    <h2>
+        <i class="bi bi-receipt"></i> Venda #{{ sale.id }}
+        {% if sale.is_cancelled %}
+            <span class="badge bg-danger">CANCELADA</span>
+        {% endif %}
+    </h2>
+    <div>
+        {% if not sale.is_cancelled and user.is_superuser %}
+            <a href="{% url 'sale_cancel' sale.id %}" class="btn btn-danger me-2">
+                <i class="bi bi-x-circle"></i> Cancelar Venda
+            </a>
+        {% endif %}
+        <a href="{% url 'sale_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar para Vendas
+        </a>
+    </div>
 </div>
 
 <div class="row">
@@ -52,17 +64,17 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <strong>Date/Hora:</strong><br>
+                    <strong>Data/Hora:</strong><br>
                     {{ sale.created_at|date:"d/m/Y H:i:s" }}
                 </div>
 
                 <div class="mb-3">
-                    <strong>Cliente:</strong><br>
+                    <strong>Customer:</strong><br>
                     {% if sale.customer %}
                         {{ sale.customer.name }}<br>
                         <small class="text-muted">{{ sale.customer.phone }}</small>
                     {% else %}
-                        Cliente Avulso
+                        Consumidor Final
                     {% endif %}
                 </div>
 
@@ -74,13 +86,24 @@
                 </div>
 
                 <div class="mb-3">
-                    <strong>Vendedor:</strong><br>
+                    <strong>Técnico Responsável:</strong><br>
                     {{ sale.user.get_full_name|default:sale.user.username }}
                 </div>
 
+                {% if sale.is_cancelled %}
+                    <div class="alert alert-danger">
+                        <strong><i class="bi bi-x-circle"></i> Venda Cancelada</strong><br>
+                        <small>Cancelada em: {{ sale.cancelled_at|date:"d/m/Y H:i:s" }}</small><br>
+                        <small>Por: {{ sale.cancelled_by.username }}</small><br>
+                        {% if sale.cancellation_reason %}
+                            <small>Motivo: {{ sale.cancellation_reason }}</small>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
                 {% if sale.notes %}
                     <div class="mb-3">
-                        <strong>Observações:</strong><br>
+                        <strong>Notes:</strong><br>
                         {{ sale.notes }}
                     </div>
                 {% endif %}

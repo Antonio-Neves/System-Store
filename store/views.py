@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import authenticate
+from django.http import JsonResponse
 from django.db.models import Sum, Count, Q, F
 from django.utils import timezone
 from datetime import timedelta
@@ -347,6 +349,56 @@ def sale_create(request):
 def sale_detail(request, pk):
     sale = get_object_or_404(Sale, pk=pk)
     return render(request, 'store/sale_detail.html', {'sale': sale})
+
+
+@login_required
+def sale_cancel(request, pk):
+    sale = get_object_or_404(Sale, pk=pk)
+
+    # Check if already cancelled
+    if sale.is_cancelled:
+        messages.error(request, 'Esta venda já está cancelada!')
+        return redirect('sale_detail', pk=pk)
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        reason = request.POST.get('reason', '')
+
+        # Authenticate superuser
+        user = authenticate(username=request.user.username, password=password)
+
+        if user is None or not user.is_superuser:
+            messages.error(request,
+                           'Senha incorreta ou usuário sem permissão de superuser!')
+            return render(request, 'store/sale_cancel.html', {'sale': sale})
+
+        # Cancel sale
+        sale.status = 'cancelled'
+        sale.cancelled_at = timezone.now()
+        sale.cancellation_reason = reason
+        sale.cancelled_by = request.user
+        sale.save()
+
+        # Return stock
+        for item in sale.items.all():
+            product = item.product
+            product.stock += item.quantity
+            product.save()
+
+            # Create stock movement
+            StockMovement.objects.create(
+                product=product,
+                movement_type='in',
+                quantity=item.quantity,
+                reason=f'Cancelamento da Venda #{sale.id} - {reason}',
+                user=request.user
+            )
+
+        messages.success(request,
+                         f'Venda #{sale.id} cancelada com sucesso! Estoque devolvido.')
+        return redirect('sale_detail', pk=pk)
+
+    return render(request, 'store/sale_cancel.html', {'sale': sale})
 
 
 # STOCK VIEWS

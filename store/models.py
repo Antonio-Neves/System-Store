@@ -65,12 +65,47 @@ class Customer(models.Model):
         return self.name
 
 
+# class Sale(models.Model):
+#     PAYMENT_METHODS = [
+#         ('cash', 'Dinheiro'),
+#         ('debit', 'Cartão de Débito'),
+#         ('credit', 'Cartão de Crédito'),
+#         ('pix', 'PIX'),
+#     ]
+#
+#     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL,
+#                                  null=True, blank=True, related_name='sales')
+#     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+#                              related_name='sales')
+#     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS,
+#                                       default='cash')
+#     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+#     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+#     notes = models.TextField(blank=True)
+#     created_at = models.DateTimeField(default=timezone.now)
+#
+#     class Meta:
+#         ordering = ['-created_at']
+#
+#     def __str__(self):
+#         return f"Sale #{self.id} - {self.created_at.strftime('%d/%m/%Y %H:%M')}"
+#
+#     @property
+#     def final_total(self):
+#         return self.total - self.discount
+
+
 class Sale(models.Model):
     PAYMENT_METHODS = [
         ('cash', 'Dinheiro'),
         ('debit', 'Cartão de Débito'),
         ('credit', 'Cartão de Crédito'),
         ('pix', 'PIX'),
+    ]
+
+    STATUS_CHOICES = [
+        ('completed', 'Concluída'),
+        ('cancelled', 'Cancelada'),
     ]
 
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL,
@@ -82,6 +117,13 @@ class Sale(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     notes = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES,
+                              default='completed')  # NEW
+    cancelled_at = models.DateTimeField(null=True, blank=True)  # NEW
+    cancellation_reason = models.TextField(blank=True)  # NEW
+    cancelled_by = models.ForeignKey(User, on_delete=models.SET_NULL,
+                                     null=True, blank=True,
+                                     related_name='cancelled_sales')  # NEW
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -93,6 +135,10 @@ class Sale(models.Model):
     @property
     def final_total(self):
         return self.total - self.discount
+
+    @property
+    def is_cancelled(self):  # NEW
+        return self.status == 'cancelled'
 
 
 class SaleItem(models.Model):
