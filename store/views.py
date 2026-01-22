@@ -17,34 +17,60 @@ def dashboard(request):
     today = timezone.now().date()
     week_ago = today - timedelta(days=7)
     month_ago = today - timedelta(days=30)
+    year_start = today.replace(month=1, day=1)
 
-    # Sales statistics
-    today_sales = Sale.objects.filter(created_at__date=today)
-    week_sales = Sale.objects.filter(created_at__date__gte=week_ago)
-    month_sales = Sale.objects.filter(created_at__date__gte=month_ago)
+    # Sales statistics - ONLY COMPLETED SALES (excluding cancelled)
+    today_sales = Sale.objects.filter(created_at__date=today,
+                                      status='completed')  # ← ADDED status filter
+    week_sales = Sale.objects.filter(created_at__date__gte=week_ago,
+                                     status='completed')  # ← ADDED
+    month_sales = Sale.objects.filter(created_at__date__gte=month_ago,
+                                      status='completed')  # ← ADDED
+    year_sales = Sale.objects.filter(created_at__date__gte=year_start,
+                                     status='completed')  # ← ADDED
 
     # Products with low stock
     low_stock_products = Product.objects.filter(stock__lte=F('min_stock'),
                                                 active=True)
 
-    # Best selling products
+    # Best selling products - ONLY from completed sales
     best_sellers = Product.objects.annotate(
-        total_sold=Sum('sale_items__quantity')
+        total_sold=Sum('sale_items__quantity',
+                       filter=Q(sale_items__sale__status='completed'))
+        # ← ADDED filter
     ).order_by('-total_sold')[:5]
 
+    # Calculate profits
+    def calculate_profit(sales_queryset):
+        total_profit = 0
+        for sale in sales_queryset:
+            for item in sale.items.all():
+                profit_per_item = (item.price - item.product.cost) * item.quantity
+                total_profit += profit_per_item
+        return total_profit
+
+    today_profit = calculate_profit(today_sales)
+    week_profit = calculate_profit(week_sales)
+    month_profit = calculate_profit(month_sales)
+    year_profit = calculate_profit(year_sales)
+
     context = {
-        'total_products': Product.objects.filter(active=True).count(),
-        'total_customers': Customer.objects.count(),
-        'today_sales_count': today_sales.count(),
         'today_sales_total': today_sales.aggregate(Sum('total'))[
                                  'total__sum'] or 0,
+        'today_profit': today_profit,
         'week_sales_total': week_sales.aggregate(Sum('total'))[
                                 'total__sum'] or 0,
+        'week_profit': week_profit,
         'month_sales_total': month_sales.aggregate(Sum('total'))[
                                  'total__sum'] or 0,
+        'month_profit': month_profit,
+        'year_sales_total': year_sales.aggregate(Sum('total'))[
+                                'total__sum'] or 0,
+        'year_profit': year_profit,
         'low_stock_products': low_stock_products,
         'best_sellers': best_sellers,
         'recent_sales': Sale.objects.all()[:10],
+        # Shows all (including cancelled for history)
     }
 
     return render(request, 'store/dashboard.html', context)
@@ -256,10 +282,18 @@ def sale_list(request):
     sales_count = sales.count()
     average_ticket = total / sales_count if sales_count > 0 else 0
 
+    # Calculate profit
+    total_profit = 0
+    for sale in sales:
+        for item in sale.items.all():
+            profit_per_item = (item.price - item.product.cost) * item.quantity
+            total_profit += profit_per_item
+
     context = {
         'sales': sales[:50],
         'total': total,
         'average_ticket': average_ticket,
+        'total_profit': total_profit,  # NEW
         'date_from': date_from,
         'date_to': date_to,
     }
