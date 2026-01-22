@@ -1,12 +1,12 @@
 {% extends 'store/base.html' %}
 
-{% block title %}Vendas{% endblock %}
+{% block title %}Vendas - Sistema de Gestão{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-cart-check"></i> Sales</h2>
+    <h2><i class="bi bi-cart-check"></i> Vendas</h2>
     <a href="{% url 'sale_create' %}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Nova venda
+        <i class="bi bi-plus-circle"></i> Nova Venda
     </a>
 </div>
 
@@ -15,16 +15,16 @@
     <div class="card-body">
         <form method="get" class="row g-3">
             <div class="col-md-5">
-                <label class="form-label">From Date</label>
+                <label class="form-label">Data Inicial</label>
                 <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
             </div>
             <div class="col-md-5">
-                <label class="form-label">To Date</label>
+                <label class="form-label">Data Final</label>
                 <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-funnel"></i> Filter
+                    <i class="bi bi-funnel"></i> Filtrar
                 </button>
             </div>
         </form>
@@ -36,16 +36,16 @@
     <div class="card-body">
         <div class="row text-center">
             <div class="col-md-4">
-                <h6 class="text-muted">Total Sales</h6>
+                <h6 class="text-muted">Total de Vendas</h6>
                 <h3>{{ sales|length }}</h3>
             </div>
             <div class="col-md-4">
-                <h6 class="text-muted">Total Revenue</h6>
+                <h6 class="text-muted">Receita Total</h6>
                 <h3 class="text-success">R$ {{ total|floatformat:2 }}</h3>
             </div>
             <div class="col-md-4">
-                <h6 class="text-muted">Average Ticket</h6>
-                <h3 class="text-info">R$ {{ average_ticket|floatformat:2 }}</h3>
+                <h6 class="text-muted">Lucro Total</h6>
+                <h3 class="text-success">R$ {{ total_profit|floatformat:2 }}</h3>
             </div>
         </div>
     </div>
@@ -60,13 +60,13 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date/Time</th>
-                            <th>Customer</th>
-                            <th>Payment</th>
+                            <th>Data/Hora</th>
+                            <th>Cliente</th>
+                            <th>Pagamento</th>
                             <th>Total</th>
-                            <th>Discount</th>
-                            <th>Final Total</th>
-                            <th>Actions</th>
+                            <th>Desconto</th>
+                            <th>Total Final</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,7 +74,7 @@
                             <tr>
                                 <td><strong>#{{ sale.id }}</strong></td>
                                 <td>{{ sale.created_at|date:"d/m/Y H:i" }}</td>
-                                <td>{{ sale.customer.name|default:"Walk-in" }}</td>
+                                <td>{{ sale.customer.name|default:"Cliente Avulso" }}</td>
                                 <td>
                                     <span class="badge bg-info">
                                         {{ sale.get_payment_method_display }}
@@ -99,7 +99,7 @@
                 </table>
             </div>
         {% else %}
-            <p class="text-center text-muted">No sales found.</p>
+            <p class="text-center text-muted">Nenhuma venda encontrada.</p>
         {% endif %}
     </div>
 </div>
