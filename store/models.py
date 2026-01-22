@@ -101,6 +101,7 @@ class Sale(models.Model):
         ('debit', 'Cartão de Débito'),
         ('credit', 'Cartão de Crédito'),
         ('pix', 'PIX'),
+        ('transferencia', 'Transferência Bancária'),
     ]
 
     STATUS_CHOICES = [
