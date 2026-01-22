@@ -15,8 +15,8 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-primary">
             <div class="card-body">
-                <h6 class="card-title">Total de Produtos</h6>
-                <h2 class="mb-0">{{ total_products }}</h2>
+                <h6 class="card-title">Faturamento Anual</h6>
+                <h2 class="mb-0">R$ {{ year_sales_total|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
@@ -24,8 +24,8 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-success">
             <div class="card-body">
-                <h6 class="card-title">Total Clientes</h6>
-                <h2 class="mb-0">{{ total_customers }}</h2>
+                <h6 class="card-title">Lucro Ano</h6>
+                <h2 class="mb-0">R$ {{ year_profit|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
@@ -33,8 +33,8 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-info">
             <div class="card-body">
-                <h6 class="card-title">Vendas de Hoje</h6>
-                <h2 class="mb-0">{{ today_sales_count }}</h2>
+                <h6 class="card-title">Faturamento de Hoje</h6>
+                <h2 class="mb-0">R$ {{ today_sales_total|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
@@ -42,8 +42,8 @@
     <div class="col-md-3 mb-3">
         <div class="card text-white bg-warning">
             <div class="card-body">
-                <h6 class="card-title text-dark">Faturamento de Hoje</h6>
-                <h2 class="mb-0 text-dark">R$ {{ today_sales_total|floatformat:2 }}</h2>
+                <h6 class="card-title text-dark">Lucro de Hoje</h6>
+                <h2 class="mb-0 text-dark">R$ {{ today_profit|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
 
 <!-- Revenue Statistics -->
 <div class="row mb-4">
-    <div class="col-md-6 mb-3">
+    <div class="col-md-3 mb-3">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Faturamento Semanal</h5>
@@ -60,11 +60,29 @@
         </div>
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Lucro Semanal</h5>
+                <h3 class="text-success">R$ {{ week_profit|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Faturamento Mensal</h5>
                 <h3 class="text-success">R$ {{ month_sales_total|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Lucro Mensal</h5>
+                <h3 class="text-success">R$ {{ month_profit|floatformat:2 }}</h3>
             </div>
         </div>
     </div>
@@ -104,13 +122,13 @@
                                     <small class="text-muted">R$ {{ product.price|floatformat:2 }}</small>
                                 </div>
                                 <span class="badge bg-primary rounded-pill">
-                                    {{ product.total_sold|default:0 }} Mais Vendidos
+                                    {{ product.total_sold|default:0 }} vendidos
                                 </span>
                             </div>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-muted">Sem Dados de Vendas.</p>
+                    <p class="text-muted">Sem dados de vendas.</p>
                 {% endif %}
             </div>
         </div>
@@ -129,7 +147,7 @@
                             <a href="{% url 'sale_detail' sale.id %}" class="list-group-item list-group-item-action">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <strong>Sale #{{ sale.id }}</strong>
+                                        <strong>Venda #{{ sale.id }}</strong>
                                         <br>
                                         <small class="text-muted">
                                             {{ sale.created_at|date:"d/m/Y H:i" }}
