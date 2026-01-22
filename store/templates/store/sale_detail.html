@@ -74,7 +74,7 @@
                         {{ sale.customer.name }}<br>
                         <small class="text-muted">{{ sale.customer.phone }}</small>
                     {% else %}
-                        Consumidor Final
+                        Cliente não identificado
                     {% endif %}
                 </div>
 
@@ -130,7 +130,7 @@
                 <hr>
 
                 <a href="{% url 'sale_receipt' sale.id %}" target="_blank" class="btn btn-primary w-100">
-                    <i class="bi bi-printer"></i> Imprimir Cupom
+                    <i class="bi bi-printer"></i> Imprimir Recibo
                 </a>
             </div>
         </div>
