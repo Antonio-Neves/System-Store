@@ -19,21 +19,21 @@ def dashboard(request):
     month_ago = today - timedelta(days=30)
     year_start = today.replace(month=1, day=1)
 
-    # Sales statistics - ONLY COMPLETED SALES (excluding cancelled)
+    # Sales statistics - ONLY COMPLETED SALES (excluding canceled)
     today_sales = Sale.objects.filter(created_at__date=today,
-                                      status='completed')  # ← ADDED status filter
+                                      status='completed')
     week_sales = Sale.objects.filter(created_at__date__gte=week_ago,
-                                     status='completed')  # ← ADDED
+                                     status='completed')
     month_sales = Sale.objects.filter(created_at__date__gte=month_ago,
-                                      status='completed')  # ← ADDED
+                                      status='completed')
     year_sales = Sale.objects.filter(created_at__date__gte=year_start,
-                                     status='completed')  # ← ADDED
+                                     status='completed')
 
     # Products with low stock
     low_stock_products = Product.objects.filter(stock__lte=F('min_stock'),
                                                 active=True)
 
-    # Best selling products - ONLY from completed sales
+    # Best-selling products - ONLY from completed sales
     best_sellers = Product.objects.annotate(
         total_sold=Sum('sale_items__quantity',
                        filter=Q(sale_items__sale__status='completed'))
@@ -55,8 +55,9 @@ def dashboard(request):
     year_profit = calculate_profit(year_sales)
 
     context = {
-        'today_sales_total': today_sales.aggregate(Sum('total'))[
-                                 'total__sum'] or 0,
+        'today_sales_total': today_sales.aggregate(
+            total_com_desconto=Sum(F('total') - F('discount'))
+        )['total_com_desconto'] or 0,
         'today_profit': today_profit,
         'week_sales_total': week_sales.aggregate(Sum('total'))[
                                 'total__sum'] or 0,
@@ -70,7 +71,7 @@ def dashboard(request):
         'low_stock_products': low_stock_products,
         'best_sellers': best_sellers,
         'recent_sales': Sale.objects.all()[:10],
-        # Shows all (including cancelled for history)
+        # Shows all (including canceled for history)
     }
 
     return render(request, 'store/dashboard.html', context)
