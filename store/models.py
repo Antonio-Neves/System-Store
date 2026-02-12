@@ -119,12 +119,12 @@ class Sale(models.Model):
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     notes = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES,
-                              default='completed')  # NEW
-    cancelled_at = models.DateTimeField(null=True, blank=True)  # NEW
-    cancellation_reason = models.TextField(blank=True)  # NEW
+                              default='completed')
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    cancellation_reason = models.TextField(blank=True)
     cancelled_by = models.ForeignKey(User, on_delete=models.SET_NULL,
                                      null=True, blank=True,
-                                     related_name='cancelled_sales')  # NEW
+                                     related_name='cancelled_sales')
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
