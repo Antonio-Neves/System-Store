@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -5,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.db.models import Sum, Count, Q, F
 from django.utils import timezone
+import datetime
 from datetime import timedelta
 from .models import Product, Category, Customer, Sale, SaleItem, StockMovement
 from .forms import ProductForm, CategoryForm, CustomerForm, SaleForm, \
@@ -15,16 +17,19 @@ from .forms import ProductForm, CategoryForm, CustomerForm, SaleForm, \
 def dashboard(request):
     # Get statistics
     today = timezone.now().date()
-    week_ago = today - timedelta(days=7)
-    month_ago = today - timedelta(days=30)
+    week_start = today - timedelta(
+        days=today.weekday())  # ← Monday of current week
+    # Current month
+    month_start = today.replace(day=1)
+    # Current year
     year_start = today.replace(month=1, day=1)
 
     # Sales statistics - ONLY COMPLETED SALES (excluding canceled)
     today_sales = Sale.objects.filter(created_at__date=today,
                                       status='completed')
-    week_sales = Sale.objects.filter(created_at__date__gte=week_ago,
-                                     status='completed')
-    month_sales = Sale.objects.filter(created_at__date__gte=month_ago,
+    week_sales = Sale.objects.filter(created_at__date__gte=week_start,
+                                     status='completed')  # ← FIXED
+    month_sales = Sale.objects.filter(created_at__date__gte=month_start,
                                       status='completed')
     year_sales = Sale.objects.filter(created_at__date__gte=year_start,
                                      status='completed')
