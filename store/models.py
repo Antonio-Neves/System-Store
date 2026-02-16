@@ -140,8 +140,20 @@ class Sale(models.Model):
         return f"Sale #{self.id} - {self.created_at.strftime('%d/%m/%Y %H:%M')}"
 
     @property
+    def discount_value(self):
+        # Always returns discount as monetary value in R$
+        if self.discount_type == 'percent':
+            return self.total * (self.discount / 100)
+        return self.discount
+
+    @property
     def final_total(self):
-        return self.total - self.discount
+        # Calculate correct discount value
+        if self.discount_type == 'percent':
+            discount_value = self.total * (self.discount / 100)
+        else:
+            discount_value = self.discount
+        return self.total - discount_value
 
     @property
     def is_cancelled(self):  # NEW
