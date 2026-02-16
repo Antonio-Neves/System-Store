@@ -10,10 +10,10 @@
     </a>
 </div>
 
-<!-- Statistics Cards -->
+<!-- Statistics Cards - Row 1 -->
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-primary">
+        <div class="card text-white" style="background-color: #004F9F;">
             <div class="card-body">
                 <h6 class="card-title">Faturamento Anual</h6>
                 <h2 class="mb-0">R$ {{ year_sales_total|floatformat:2 }}</h2>
@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-success">
+        <div class="card text-white" style="background-color: #003d7a;">
             <div class="card-body">
                 <h6 class="card-title">Lucro Ano</h6>
                 <h2 class="mb-0">R$ {{ year_profit|floatformat:2 }}</h2>
@@ -31,58 +31,58 @@
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-info">
+        <div class="card text-white" style="background-color: #004F9F;">
             <div class="card-body">
-                <h6 class="card-title">Faturamento de Hoje</h6>
-                <h2 class="mb-0">R$ {{ today_sales_total|floatformat:2 }}</h2>
+                <h6 class="card-title">Faturamento Mensal</h6>
+                <h2 class="mb-0">R$ {{ month_sales_total|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card text-white bg-warning">
+        <div class="card text-white" style="background-color: #003d7a;">
             <div class="card-body">
-                <h6 class="card-title text-dark">Lucro de Hoje</h6>
-                <h2 class="mb-0 text-dark">R$ {{ today_profit|floatformat:2 }}</h2>
+                <h6 class="card-title">Lucro Mensal</h6>
+                <h2 class="mb-0">R$ {{ month_profit|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Revenue Statistics -->
+<!-- Statistics Cards - Row 2 -->
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
-        <div class="card">
+        <div class="card text-white" style="background-color: #FBB900;">
             <div class="card-body">
-                <h5 class="card-title">Faturamento Semanal</h5>
-                <h3 class="text-success">R$ {{ week_sales_total|floatformat:2 }}</h3>
+                <h6 class="card-title text-dark">Faturamento Semanal</h6>
+                <h2 class="mb-0 text-dark">R$ {{ week_sales_total|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card">
+        <div class="card text-white" style="background-color: #e0a800;">
             <div class="card-body">
-                <h5 class="card-title">Lucro Semanal</h5>
-                <h3 class="text-success">R$ {{ week_profit|floatformat:2 }}</h3>
+                <h6 class="card-title text-dark">Lucro Semanal</h6>
+                <h2 class="mb-0 text-dark">R$ {{ week_profit|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card">
+        <div class="card text-white" style="background-color: #FBB900;">
             <div class="card-body">
-                <h5 class="card-title">Faturamento Mensal</h5>
-                <h3 class="text-success">R$ {{ month_sales_total|floatformat:2 }}</h3>
+                <h6 class="card-title text-dark">Faturamento de Hoje</h6>
+                <h2 class="mb-0 text-dark">R$ {{ today_sales_total|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card">
+        <div class="card text-white" style="background-color: #e0a800;">
             <div class="card-body">
-                <h5 class="card-title">Lucro Mensal</h5>
-                <h3 class="text-success">R$ {{ month_profit|floatformat:2 }}</h3>
+                <h6 class="card-title text-dark">Lucro de Hoje</h6>
+                <h2 class="mb-0 text-dark">R$ {{ today_profit|floatformat:2 }}</h2>
             </div>
         </div>
     </div>
