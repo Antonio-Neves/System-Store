@@ -119,7 +119,7 @@
                     <div class="d-flex justify-content-between mb-2">
                         <span>Desconto:</span>
                         <strong class="text-danger">
-                            - R$ {{ sale.discount_value|floatformat:2 }}
+                            R$ {{ sale.discount_value|floatformat:2 }}
                             {% if sale.discount_type == 'percent' %}
                                 ({{ sale.discount|floatformat:0 }}%)
                             {% endif %}

@@ -43,8 +43,8 @@
         }
 
         .logo {
-            width: 17mm;
-            height: 17mm;
+            width: 30mm;
+            height: 30mm;
             object-fit: contain;
         }
 
@@ -255,7 +255,8 @@
         <div class="info-row">
             <div class="info-box">
                 <div class="box-label">Data e Hora</div>
-                <div class="box-value">{{ sale.created_at|date:"d/m/Y \à\s H:i" }}</div>
+{#                <div class="box-value">{{ sale.created_at|date:"d/m/Y às H:i" }}</div>#}
+                <div class="box-value">{{ printed_at|date:"d/m/Y" }} às {{ printed_at|date:"H:i" }}</div>
             </div>
             <div class="info-box">
                 <div class="box-label">Vendedor</div>
@@ -340,9 +341,20 @@
                     <span>R$ {{ sale.total|floatformat:2 }}</span>
                 </div>
                 {% if sale.discount > 0 %}
+{#                <div class="total-line">#}
+{#                    <span>Desconto:</span>#}
+{#                    <span>R$ {{ sale.discount|floatformat:2 }}</span>#}
+{#                </div>#}
                 <div class="total-line">
                     <span>Desconto:</span>
-                    <span>R$ {{ sale.discount|floatformat:2 }}</span>
+                    <span>
+                        <strong class="text-danger">
+                                R$ {{ sale.discount_value|floatformat:2 }}
+                                {% if sale.discount_type == 'percent' %}
+                                    ({{ sale.discount|floatformat:0 }}%)
+                                {% endif %}
+                        </strong>
+                    </span>
                 </div>
                 {% endif %}
                 <div class="total-line total-final">
@@ -362,9 +374,9 @@
                 Obrigado pela preferência!
             </div>
             <div>
-                © {% now "Y" %} AN Informática |
                 Este documento não possui valor fiscal |
-                Impresso em: {% now "d/m/Y \à\s H:i" %}
+                Sistema de Gestão - AN Informática |
+                Impresso em: {{ printed_at|date:"d/m/Y" }} às {{ printed_at|date:"H:i" }}
             </div>
         </div>
     </div>

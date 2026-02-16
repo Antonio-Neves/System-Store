@@ -41,11 +41,22 @@ def dashboard(request):
     ).order_by('-total_sold')[:5]
 
     # Calculate profits
+    # def calculate_profit(sales_queryset):
+    #     total_profit = 0
+    #     for sale in sales_queryset:
+    #         for item in sale.items.all():
+    #             profit_per_item = (item.price - item.product.cost) * item.quantity
+    #             total_profit += profit_per_item
+    #     return total_profit
+
     def calculate_profit(sales_queryset):
         total_profit = 0
         for sale in sales_queryset:
             for item in sale.items.all():
-                profit_per_item = (item.price - item.product.cost) * item.quantity
+                # Use final_total proportionally to account for discount
+                discount_ratio = sale.final_total / sale.total if sale.total > 0 else 1
+                profit_per_item = (
+                                              item.price * discount_ratio - item.product.cost) * item.quantity
                 total_profit += profit_per_item
         return total_profit
 
@@ -54,19 +65,38 @@ def dashboard(request):
     month_profit = calculate_profit(month_sales)
     year_profit = calculate_profit(year_sales)
 
+    # Change aggregate to use final_total via Python (not DB aggregate)
+    def calculate_total(sales_qs):
+        return sum(sale.final_total for sale in sales_qs)
+
+    # context = {
+    #     'today_sales_total': today_sales.aggregate(
+    #         total_com_desconto=Sum(F('total') - F('discount'))
+    #     )['total_com_desconto'] or 0,
+    #     'today_profit': today_profit,
+    #     'week_sales_total': week_sales.aggregate(Sum('total'))[
+    #                             'total__sum'] or 0,
+    #     'week_profit': week_profit,
+    #     'month_sales_total': month_sales.aggregate(Sum('total'))[
+    #                              'total__sum'] or 0,
+    #     'month_profit': month_profit,
+    #     'year_sales_total': year_sales.aggregate(Sum('total'))[
+    #                             'total__sum'] or 0,
+    #     'year_profit': year_profit,
+    #     'low_stock_products': low_stock_products,
+    #     'best_sellers': best_sellers,
+    #     'recent_sales': Sale.objects.all()[:10],
+    #     # Shows all (including canceled for history)
+    # }
+
     context = {
-        'today_sales_total': today_sales.aggregate(
-            total_com_desconto=Sum(F('total') - F('discount'))
-        )['total_com_desconto'] or 0,
+        'today_sales_total': calculate_total(today_sales),
+        'week_sales_total': calculate_total(week_sales),
+        'month_sales_total': calculate_total(month_sales),
+        'year_sales_total': calculate_total(year_sales),
         'today_profit': today_profit,
-        'week_sales_total': week_sales.aggregate(Sum('total'))[
-                                'total__sum'] or 0,
         'week_profit': week_profit,
-        'month_sales_total': month_sales.aggregate(Sum('total'))[
-                                 'total__sum'] or 0,
         'month_profit': month_profit,
-        'year_sales_total': year_sales.aggregate(Sum('total'))[
-                                'total__sum'] or 0,
         'year_profit': year_profit,
         'low_stock_products': low_stock_products,
         'best_sellers': best_sellers,
@@ -266,12 +296,48 @@ def customer_update(request, pk):
 
 
 # SALE VIEWS
+# @login_required
+# def sale_list(request):
+#     date_from = request.GET.get('date_from', '')
+#     date_to = request.GET.get('date_to', '')
+#
+#     sales = Sale.objects.all()
+#
+#     if date_from:
+#         sales = sales.filter(created_at__date__gte=date_from)
+#
+#     if date_to:
+#         sales = sales.filter(created_at__date__lte=date_to)
+#
+#     total = sales.aggregate(Sum('total'))['total__sum'] or 0
+#     sales_count = sales.count()
+#     average_ticket = total / sales_count if sales_count > 0 else 0
+#
+#     # Calculate profit
+#     total_profit = 0
+#     for sale in sales:
+#         for item in sale.items.all():
+#             profit_per_item = (item.price - item.product.cost) * item.quantity
+#             total_profit += profit_per_item
+#
+#     context = {
+#         'sales': sales[:50],
+#         'total': total,
+#         'average_ticket': average_ticket,
+#         'total_profit': total_profit,  # NEW
+#         'date_from': date_from,
+#         'date_to': date_to,
+#     }
+#
+#     return render(request, 'store/sale_list.html', context)
+
+
 @login_required
 def sale_list(request):
     date_from = request.GET.get('date_from', '')
     date_to = request.GET.get('date_to', '')
 
-    sales = Sale.objects.all()
+    sales = Sale.objects.filter(status='completed')
 
     if date_from:
         sales = sales.filter(created_at__date__gte=date_from)
@@ -279,22 +345,23 @@ def sale_list(request):
     if date_to:
         sales = sales.filter(created_at__date__lte=date_to)
 
-    total = sales.aggregate(Sum('total'))['total__sum'] or 0
+    # Use final_total (after discount) for revenue
+    total = sum(sale.final_total for sale in sales)
     sales_count = sales.count()
-    average_ticket = total / sales_count if sales_count > 0 else 0
 
-    # Calculate profit
+    # Calculate profit considering discount
     total_profit = 0
     for sale in sales:
+        discount_ratio = sale.final_total / sale.total if sale.total > 0 else 1
         for item in sale.items.all():
-            profit_per_item = (item.price - item.product.cost) * item.quantity
+            profit_per_item = (
+                                          item.price * discount_ratio - item.product.cost) * item.quantity
             total_profit += profit_per_item
 
     context = {
         'sales': sales[:50],
         'total': total,
-        'average_ticket': average_ticket,
-        'total_profit': total_profit,  # NEW
+        'total_profit': total_profit,
         'date_from': date_from,
         'date_to': date_to,
     }
@@ -310,6 +377,7 @@ def sale_create(request):
         customer_id = request.POST.get('customer')
         payment_method = request.POST.get('payment_method')
         discount = request.POST.get('discount', 0)
+        discount_type = request.POST.get('discount_type', 'value')
         notes = request.POST.get('notes', '')
 
         if not product_ids:
@@ -322,7 +390,8 @@ def sale_create(request):
             customer_id=customer_id if customer_id else None,
             payment_method=payment_method,
             discount=float(discount) if discount else 0,
-            notes = request.POST.get('notes', '')
+            discount_type=discount_type,  # NEW
+            notes=request.POST.get('notes', '')
         )
 
         total = 0
@@ -488,4 +557,7 @@ def stock_adjustment(request):
 @login_required
 def sale_receipt(request, pk):
     sale = get_object_or_404(Sale, pk=pk)
-    return render(request, 'store/sale_receipt.html', {'sale': sale})
+    return render(request, 'store/sale_receipt.html', {
+        'sale': sale,
+        'printed_at': timezone.now(),  # ← ADD THIS
+    })

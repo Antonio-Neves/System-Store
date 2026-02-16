@@ -60,13 +60,25 @@
                     <!-- Discount -->
                     <div class="mb-3">
                         <label class="form-label">Desconto</label>
-                        <input type="number"
-                               name="discount"
-                               class="form-control"
-                               step="0.01"
-                               value="0"
-                               id="discount"
-                               onchange="calculateTotal()">
+                        <div class="input-group">
+                            <input type="number"
+                                   name="discount"
+                                   class="form-control"
+                                   step="0.01"
+                                   value="0"
+                                   id="discount"
+                                   min="0"
+                                   onchange="calculateTotal()">
+                            <select name="discount_type"
+                                    id="discount_type"
+                                    class="form-select"
+                                    style="max-width: 120px;"
+                                    onchange="calculateTotal()">
+                                <option value="value">R$</option>
+                                <option value="percent">%</option>
+                            </select>
+                        </div>
+                        <small class="form-text text-muted" id="discount_hint"></small>
                     </div>
 
                     <!-- Notes -->
@@ -118,7 +130,7 @@
                     <option value="{{ product.id }}"
                             data-price="{{ product.price }}"
                             data-stock="{{ product.stock }}">
-                        {{ product.name }} - R$ {{ product.price|floatformat:2 }} (Stock: {{ product.stock }})
+                        {{ product.name }} - R$ {{ product.price|floatformat:2 }} (Estoque: {{ product.stock }})
                     </option>
                 {% endfor %}
             </select>
@@ -127,7 +139,7 @@
             <input type="number"
                    name="quantity"
                    class="form-control"
-                   placeholder="Qty"
+                   placeholder="Qtd"
                    min="1"
                    value="1"
                    onchange="calculateTotal()"
@@ -136,7 +148,7 @@
         <div class="col-md-2">
             <input type="text"
                    class="form-control item-price"
-                   placeholder="Price"
+                   placeholder="Preço"
                    readonly>
         </div>
         <div class="col-md-1">
@@ -171,7 +183,7 @@
             itemCount--;
             calculateTotal();
         } else {
-            alert('At least one item is required!');
+            alert('É necessário pelo menos um produto!');
         }
     }
 
@@ -201,11 +213,24 @@
             }
         });
 
-        const discount = parseFloat(document.getElementById('discount').value) || 0;
-        const total = subtotal - discount;
+        const discountInput = parseFloat(document.getElementById('discount').value) || 0;
+        const discountType = document.getElementById('discount_type').value;
+
+        // Calculate discount value in R$
+        let discountValue = 0;
+        if (discountType === 'percent') {
+            discountValue = subtotal * (discountInput / 100);
+            document.getElementById('discount_hint').textContent =
+                discountInput > 0 ? `Equivalente a R$ ${discountValue.toFixed(2)}` : '';
+        } else {
+            discountValue = discountInput;
+            document.getElementById('discount_hint').textContent = '';
+        }
+
+        const total = subtotal - discountValue;
 
         document.getElementById('subtotal').textContent = 'R$ ' + subtotal.toFixed(2);
-        document.getElementById('discount-display').textContent = 'R$ ' + discount.toFixed(2);
+        document.getElementById('discount-display').textContent = 'R$ ' + discountValue.toFixed(2);
         document.getElementById('total').textContent = 'R$ ' + Math.max(0, total).toFixed(2);
     }
 
@@ -223,7 +248,7 @@
 
         if (!hasItems) {
             e.preventDefault();
-            alert('Please add at least one product!');
+            alert('Adicione pelo menos um produto!');
             return false;
         }
 
