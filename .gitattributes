@@ -1,5 +1,5 @@
 # Ignore all HTML files in the language stats
-*.html linguist-vendored
+# *.html linguist-vendored
 
 # Set default behavior to automatically normalize line endings
 * text=auto
