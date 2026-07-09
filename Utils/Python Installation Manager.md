@@ -42,3 +42,9 @@ Alterar versão principal do Python
 ```jsx
 $Env:PYTHON_MANAGER_DEFAULT="3.12"
 ```
+
+Change global Python version
+
+```jsx
+setx PYTHON_MANAGER_DEFAULT "3.12"
+```
