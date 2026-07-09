@@ -43,6 +43,13 @@
 - This includes `db.sqlite3`, `*.sqlite`, `*.sqlite3`, and `*.db`.
 - Treat all database files as permanently inaccessible.
 
+## Git
+- Never perform Git operations.
+- Never create, amend, or sign commits.
+- Never stage or unstage files.
+- Never create, switch, merge, or delete branches.
+- Never push, pull, fetch, rebase, stash, or tag.
+
 ---
 
 # Project Overview
