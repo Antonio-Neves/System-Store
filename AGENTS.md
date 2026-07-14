@@ -75,6 +75,10 @@
 Small business management system designed for small retailers and service providers.
 Covers sales, inventory, products, customers, and related operations.
 
+The codebase is evolving rapidly.
+Significant refactoring, new modules, and structural changes are expected.
+Do not remove, rename, or repurpose files or directories solely because they appear unused, unless explicitly instructed.
+
 ## Target Users
 
 - Small retail store owners in Brazil
