@@ -1,11 +1,11 @@
 ---
 description: Review Backend code
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: false
-  task: false
+temperature: 0.1
+permission:
+  edit: deny
+  bash: deny
+  task: deny
 ---
 
 # Back End Reviewer Agent
